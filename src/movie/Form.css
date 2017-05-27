@@ -1,0 +1,21 @@
+input[type=file] {
+    display: none;
+}
+
+.file-input {
+    border: 1px mediumvioletred solid;
+    padding: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form-gallery {
+    margin: 20px 0;
+}
+
+.form-gallery img{
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 100px;
+    margin-right: 20px;
+}
