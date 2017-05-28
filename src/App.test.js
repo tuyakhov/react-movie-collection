@@ -25,7 +25,9 @@ it('renders without crashing', () => {
 });
 
 it('creates, updates and deletes movies', () => {
-	const app = shallow(<App storage={fakeStorage}/>);
+	// mock react router context
+	const context = {router: {history: {push(){}, replace(){}}}};
+	const app = shallow(<App storage={fakeStorage}/>, {context});
 	let fakeMovie = {title: 'Fake movie', pictures: [{imagePreviewUrl: 'data'}]};
 	// create
 	app.instance().createMovie(fakeMovie);

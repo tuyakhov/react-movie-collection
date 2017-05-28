@@ -5,7 +5,8 @@
 .movie-collection li {
     position: relative;
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     border: 1px solid #000;
     border-radius: 3px;
     padding: 3px;

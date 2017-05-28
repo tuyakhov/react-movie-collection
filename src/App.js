@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import './App.css';
 import Collection from './movie/Collection';
 import Form from './movie/Form';
+import View from './movie/View';
 import {Route, Link} from 'react-router-dom';
 
 class App extends Component {
@@ -12,6 +13,15 @@ class App extends Component {
 		storage: PropTypes.shape({
 			getItem: PropTypes.func.isRequired,
 			setItem: PropTypes.func.isRequired
+		}).isRequired
+	};
+
+	static contextTypes = {
+		router: PropTypes.shape({
+			history: PropTypes.shape({
+				push: PropTypes.func.isRequired,
+				replace: PropTypes.func.isRequired
+			}).isRequired,
 		}).isRequired
 	};
 
@@ -47,12 +57,18 @@ class App extends Component {
 		this.props.storage.setItem('movies', JSON.stringify(this.state.movies));
 	}
 
+	redirect() {
+		const { history } = this.context.router;
+		history.push('/movies');
+	}
+
 	/**
 	 * Appends movie to the storage.
 	 * @param data
 	 */
 	createMovie(data) {
 		this.setState({movies: [...this.state.movies, data]});
+		this.redirect();
 	}
 
 	/**
@@ -67,6 +83,7 @@ class App extends Component {
 			data,
 			...movies.slice(key + 1)
 		]});
+		this.redirect();
 	}
 
 	/**
@@ -90,8 +107,8 @@ class App extends Component {
 				</div>
 
 				<ul className="menu">
-					<li><Link to={'/movies'}>My Collection</Link></li>
-					<li><Link to={'/movies/create'}>Add a movie</Link></li>
+					<li><Link to="/movies">My Collection</Link></li>
+					<li><Link to="/movies/create">Add a movie</Link></li>
 				</ul>
 
 				<Route
@@ -113,6 +130,14 @@ class App extends Component {
 						const movie = this.state.movies[id];
 						if (!movie) throw Error('Movie doesn\'t exist');
 						return <Form onSubmit={(data) => this.updateMovie(id, data)} {...movie}/>
+					}}
+				/>
+				<Route
+					path="/movies/view/:id"
+					render={({match}) => {
+						const movie = this.state.movies[match.params.id];
+						if (!movie) throw Error('Movie doesn\'t exist');
+						return <View movie={movie}/>
 					}}
 				/>
 			</div>

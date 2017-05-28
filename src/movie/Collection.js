@@ -21,7 +21,7 @@ class Collection extends Component {
 			<ul className="movie-collection">
 				{this.props.movies.map((movie, index) => {
 					return <li key={index}>
-						<h3>{movie.title}</h3>
+						<Link to={`/movies/view/${index}`}><h3>{movie.title}</h3></Link>
 						<img src={movie.pictures[0].imagePreviewUrl} alt={movie.title}/>
 						<div className="movie-collection__actions">
 							<button onClick={() => this.deleteItem(index)}>&#128465;</button>
