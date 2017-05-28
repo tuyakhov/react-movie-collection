@@ -47,7 +47,7 @@ class App extends Component {
 	 */
 	getMovies() {
 		const movies = this.props.storage.getItem('movies');
-		return movies && JSON.parse(movies) || [];
+		return (movies && JSON.parse(movies)) || [];
 	}
 
 	/**

@@ -106,7 +106,7 @@ class Form extends Component {
 					{this.state.pictures.map((picture, index) => {
 						return <div key={index} className="form-gallery__item">
 							<img src={picture.imagePreviewUrl} alt=""/>
-							<button onClick={() => this.removePicture(index)}>&#128465;</button>
+							<button type="button" onClick={() => this.removePicture(index)}>&#128465;</button>
 						</div>
 					})}
 					{this.state.pictures.length === 0 &&
