@@ -12,8 +12,26 @@ class Form extends Component {
 		super(props);
 		this.state = {
 			title: this.props.title || '',
-			pictures: this.props.pictures || []
+			pictures: this.props.pictures || [],
+			errors: []
 		};
+	}
+
+	/**
+	 * Validate attributes
+	 * @returns {boolean}
+	 */
+	validate() {
+		const {title, pictures} = this.state;
+		let errors = [];
+		if (!title || title.length < 3) {
+			errors.push("Title can't be blank or have less then 3 characters.");
+		}
+		if (!pictures || !pictures.length) {
+			errors.push("You have to upload at least one picture.");
+		}
+		this.setState({errors});
+		return !errors.length;
 	}
 
 	handleInputChange(e) {
@@ -22,7 +40,9 @@ class Form extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		this.props.onSubmit(this.state);
+		if (this.validate()) {
+			this.props.onSubmit(this.state);
+		}
 	}
 
 	addPicture(e) {
@@ -46,9 +66,23 @@ class Form extends Component {
 		reader.readAsDataURL(file);
 	}
 
+	removePicture(key) {
+		this.setState({...this.state, pictures: [
+			...this.state.pictures.slice(0, key),
+			...this.state.pictures.slice(key + 1)
+		]})
+	}
+
 	render() {
 		return (
 			<form onSubmit={e => this.handleSubmit(e)}>
+				{!!this.state.errors.length &&
+					<ul className="errors">
+						{this.state.errors.map((error, key) => {
+							return <li key={key}>{error}</li>
+						})}
+					</ul>
+				}
 				<div>
 					<h4>Title:</h4>
 					<input
@@ -60,8 +94,9 @@ class Form extends Component {
 				<div>
 					<h4>Pictures:</h4>
 					<label className="file-input">
-						+ Add picture
+						+ Upload picture
 						<input
+							accept="image/*"
 							name="pictures"
 							type="file"
 							onChange={e => this.addPicture(e)} />
@@ -69,10 +104,16 @@ class Form extends Component {
 				</div>
 				<div className="form-gallery">
 					{this.state.pictures.map((picture, index) => {
-						return <img key={index} src={picture.imagePreviewUrl} alt=""/>
+						return <div key={index} className="form-gallery__item">
+							<img src={picture.imagePreviewUrl} alt=""/>
+							<button onClick={() => this.removePicture(index)}>&#128465;</button>
+						</div>
 					})}
+					{this.state.pictures.length === 0 &&
+						<p>No pictures yet.</p>
+					}
 				</div>
-				<input type="submit" value="Submit" />
+				<button type="submit">Submit</button>
 			</form>
 		)
 	}

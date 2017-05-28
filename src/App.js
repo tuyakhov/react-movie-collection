@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import logo from './logo.svg';
 import './App.css';
 import Collection from './movie/Collection';
 import Form from './movie/Form';
@@ -8,7 +9,10 @@ import {Route, Link} from 'react-router-dom';
 class App extends Component {
 
 	static propTypes = {
-		storage: PropTypes.object.isRequired
+		storage: PropTypes.shape({
+			getItem: PropTypes.func.isRequired,
+			setItem: PropTypes.func.isRequired
+		}).isRequired
 	};
 
 	constructor(props) {
@@ -18,18 +22,27 @@ class App extends Component {
 		};
 	}
 
-	componentDidMount() {
-		this.setState({movies: this.getMovies()})
+	componentWillMount() {
+		// set initial state from storage
+		this.setState({movies: this.getMovies()});
 	}
 
 	componentDidUpdate() {
 		this.persistState();
 	}
 
+	/**
+	 * Retrieve movies from storage
+	 * @returns {Array}
+	 */
 	getMovies() {
-		return JSON.parse(this.props.storage.getItem('movies')) || [];
+		const movies = this.props.storage.getItem('movies');
+		return movies && JSON.parse(movies) || [];
 	}
 
+	/**
+	 * Save current state into storage.
+	 */
 	persistState() {
 		this.props.storage.setItem('movies', JSON.stringify(this.state.movies));
 	}
@@ -71,12 +84,15 @@ class App extends Component {
 	render() {
 		return (
 			<div className="app">
-				<div className="app-header">
+				<div className="app__header">
+					<img src={logo} className="app__logo" alt="logo" />
 					<h2>Welcome to Movie Collection</h2>
 				</div>
 
-				<Link to={'/movies'}>My Collection</Link>
-				<Link to={'/movies/create'}>Add a movie</Link>
+				<ul className="menu">
+					<li><Link to={'/movies'}>My Collection</Link></li>
+					<li><Link to={'/movies/create'}>Add a movie</Link></li>
+				</ul>
 
 				<Route
 					exact

@@ -3,8 +3,38 @@
     padding: 4px;
 }
 .movie-collection li {
-    display: inline;
+    position: relative;
+    display: inline-block;
     margin-right: 5px;
     border: 1px solid #000;
+    border-radius: 3px;
     padding: 3px;
+}
+.movie-collection li img {
+    height: 200px;
+    vertical-align: middle;
+}
+.movie-collection li:hover .movie-collection__actions {
+    opacity:1;
+    transition:opacity 0.2s linear;
+}
+.movie-collection__actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    line-height: 50px;
+    background-color: rgba(214, 214, 214, 0.8);
+    opacity:0;
+    transition:opacity 0.2s linear;
+}
+.movie-collection__actions a, .movie-collection__actions button {
+    text-decoration: none;
+    background-color: white;
+    border: 1px solid darkgrey;
+    padding: 10px;
+    cursor: pointer;
+}
+.movie-collection__actions a {
+    padding: 9px;
 }

@@ -18,13 +18,15 @@ class Collection extends Component {
 
 	render() {
 		return (
-			<ul>
+			<ul className="movie-collection">
 				{this.props.movies.map((movie, index) => {
 					return <li key={index}>
 						<h3>{movie.title}</h3>
 						<img src={movie.pictures[0].imagePreviewUrl} alt={movie.title}/>
-						<span onClick={() => this.deleteItem(index)}>delete</span>
-						<Link to={`/movies/update/${index}`}>update</Link>
+						<div className="movie-collection__actions">
+							<button onClick={() => this.deleteItem(index)}>&#128465;</button>
+							<Link to={`/movies/update/${index}`}>&#9998;</Link>
+						</div>
 					</li>
 				})}
 			</ul>
